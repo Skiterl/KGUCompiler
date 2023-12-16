@@ -24,8 +24,8 @@ namespace Domain.Entities
             post_dec = new Word("--", Tag.POST_DEC, TokenType.UNARY_OPERATOR),
             pre_inc = new Word("++", Tag.PRE_INC, TokenType.UNARY_OPERATOR),
             pre_dec = new Word("--", Tag.PRE_DEC, TokenType.UNARY_OPERATOR),
-            True = new Word("true", Tag.TRUE, TokenType.CONST),
-            False = new Word("false", Tag.FALSE, TokenType.CONST),
+            True = new Boolean("true"),
+            False = new Boolean("false"),
             EOF = new Word("eof", Tag.EOF, TokenType.EOF);
     }
 }

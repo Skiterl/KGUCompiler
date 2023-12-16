@@ -6,7 +6,7 @@ namespace Domain.Entities
     public class Real:Token
     {
         public float Value { get; init; }
-        public Real(float value) : base(Tag.REAL, TokenType.CONST) => Value = value;
+        public Real(float value) : base(Tag.REAL_CONST, TokenType.CONST) => Value = value;
         public override string? ToString() => "real";
     }
 }

@@ -94,8 +94,6 @@ namespace Frontend.Lexical
             string str = posLex.ToString();
             Word posKW;
 
-
-
             if (Words.TryGetValue(str, out posKW))
             {
                 if (posKW.Tag == Tag.DIM) StateChanged(LexerState.IN_DEFINITION);
@@ -156,7 +154,7 @@ namespace Frontend.Lexical
                             {
                                 if (curChar == ',') return HandleToken(",", Tag.COMMA, TokenType.SEPARATOR);
                                 Word Type = HandleWord(curChar);
-                                if (Type.Tag == Tag.BASIC)
+                                if (Type.TokenType == TokenType.TYPE)
                                 {
                                     StateChanged(LexerState.DEFAULT);
                                     return Type;
@@ -208,7 +206,7 @@ namespace Frontend.Lexical
                                     else return HandleToken(">", Tag.GREATER, TokenType.BINARY_OPERATOR);
                                 case '!':
                                     if (IsNextSymbol((char c) => c == '=')) return HandleComplexToken(Word.ne);
-                                    else return HandleToken("!", Tag.NOT, TokenType.BINARY_OPERATOR);
+                                    else return HandleToken("!", Tag.NOT, TokenType.UNARY_OPERATOR);
                                 case '+':
                                     if (IsNextSymbol((char c) => c == '+')) 
                                     {

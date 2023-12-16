@@ -8,12 +8,12 @@ namespace Frontend.Symbols
     {
         public int Width { get; set; } = 0;
 
-        public DataType(string lexeme, Tag tag, int width) : base(lexeme, tag, TokenType.KEYWORD) => Width = width;
+        public DataType(string lexeme, Tag tag, int width) : base(lexeme, tag, TokenType.TYPE) => Width = width;
         public static DataType
-            Integer = new DataType("integer", Tag.BASIC, 4),
-            Real = new DataType("real", Tag.BASIC, 8),
-            Char = new DataType("char", Tag.BASIC, 1),
-            Bool = new DataType("boolean", Tag.BASIC, 1);
+            Integer = new DataType("integer", Tag.INTEGER_TYPE, 4),
+            Real = new DataType("real", Tag.REAL_TYPE, 8),
+            Char = new DataType("char", Tag.CHAR_TYPE, 1),
+            Bool = new DataType("boolean", Tag.BOOLEAN_TYPE, 1);
 
         public static List<Tag> BooleanResultOperators { get; private set; } = new List<Tag>() {
         Tag.AND, Tag.OR,
@@ -38,7 +38,6 @@ namespace Frontend.Symbols
             return true;
         }
         
-
         public override string ToString() => "type";
     }
 }

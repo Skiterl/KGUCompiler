@@ -18,9 +18,10 @@ namespace Domain.Enums
         GREATER_EQUAL, LESS_EQUAL, GREATER, LESS,
         // ASSIGN
         ASSIGN,
+        // CONSTANTS
+        INTEGER_CONST, REAL_CONST, BOOLEAN_CONST,
         // TYPES
-        INTEGER, REAL, BOOLEAN,
-        BASIC,
+        INTEGER_TYPE, REAL_TYPE, BOOLEAN_TYPE, CHAR_TYPE,
         // DECL
         DIM,
         // ID
