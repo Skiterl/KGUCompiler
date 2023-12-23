@@ -43,6 +43,10 @@ namespace Domain.Enums
         // IO
         WRITE, READLN,
         // EOF
-        EOF
+        EOF,
+
+
+        // GENERATION POLIS
+        BP, UPL, LABEL
     }
 }

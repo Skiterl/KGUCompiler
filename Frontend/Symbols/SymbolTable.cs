@@ -10,21 +10,36 @@ namespace Frontend.Symbols
 {
     public class SymbolTable
     {
-        public Dictionary<Token, Id> Table { get; private set; } = new Dictionary<Token, Id>();
-        private SymbolTable Prev { get; set; } = null;
+        public int Offset { get; set; } = 0;
+        public Dictionary<Id, DataType> Table { get; private set; }
+        public SymbolTable Prev { get; set; } = null;
         public SymbolTable(SymbolTable prev)
         {
-            Table = new Dictionary<Token, Id>();
+            Table = new Dictionary<Id, DataType>();
             Prev = prev;
         }
 
-        public void Put(Word word, Id id) => Table.Add(word, id);
-        public Id? Get(Word w)
+        public void Put(DataType type, Id id)
+        {
+            Offset += type.Width;
+            id.Offset = Offset;
+            Table.Add(id, type);
+        }
+        public DataType? GetType(Id w)
         {
             for(SymbolTable t = this; t != null; t = t.Prev)
             {
-                Id found = t.Table[w];
-                if (found != null) return found;
+                DataType found;
+                try
+                {
+                    //found = t.Table[w];
+                    found = Table.First(id => id.Key.Value == w.Value).Value;
+                }
+                catch (Exception e)
+                {
+                    return null;
+                }
+                return found;
             }
             return null;
         }
