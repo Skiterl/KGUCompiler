@@ -1,4 +1,5 @@
-﻿using Backend.RPN;
+﻿using Backend.POLIS;
+using Backend.RPN;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +10,10 @@ namespace Backend.Asm
 {
     public class AsmGenerator
     {
-        public RPNGenerator gen { get; set; }
+        public POLISGenerator gen { get; set; }
         public AsmGenerator(string path)
         {
-            gen = new RPNGenerator(path);
+            gen = new POLISGenerator(path);
         }
 
         public string GenerateNASM()

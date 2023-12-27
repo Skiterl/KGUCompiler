@@ -16,7 +16,7 @@ namespace Backend.RPN
         INTEGER, BOOLEAN, REAL, CHAR
     }
 
-    public class RPNEntity
+    public abstract class RPNEntity
     {
         public Tag tag;
         public RPNEntityType Type { get; set; }
@@ -119,11 +119,13 @@ namespace Backend.RPN
             {Tag.SEMICOLON, new int[2] { 1, -1 } },
             {Tag.COMMA, new int[2] { 1, -1 } },
 
-            {Tag.POST_INC, new int[2]{5, 5 } },
-            {Tag.POST_DEC, new int[2]{5, 5 } },
+            {Tag.ASSIGN, new int[2]{4, 4 } },
+
+            {Tag.POST_INC, new int[2]{3, 3 } },
+            {Tag.POST_DEC, new int[2]{3, 3 } },
             {Tag.PRE_DEC, new int[2]{6, 6 } },
             {Tag.PRE_INC, new int[2]{6, 6 } },
-            {Tag.UPLUS, new int[2]{7, 7 } },
+            {Tag.UPLUS, [7, 7 ] },
             {Tag.UMINUS, new int[2]{7, 7 } },
             {Tag.AND, new int[2]{8, 8 } },
             {Tag.OR, new int[2]{8, 8 } },
@@ -135,7 +137,6 @@ namespace Backend.RPN
             {Tag.GREATER_EQUAL, new int [2] { 10, 10 } },
             {Tag.EQUAL, new int [2]{10, 10 } },
             {Tag.NOT_EQUAL, new int[2]{10, 10 } },
-            {Tag.ASSIGN, new int[2]{10, 10 } },
 
             {Tag.SUM, new int [2]{11, 11 } },
             {Tag.SUB, new int [2]{11, 11 } },
@@ -220,7 +221,7 @@ namespace Backend.RPN
                                     }
                                 }
                             }
-                            if (tokens[i] is Domain.Entities.Boolean boolConst) RPNResult.Add(new ConstRPN(boolConst.Value, ConstType.BOOLEAN, Tag.BOOLEAN_CONST));
+                            if (tokens[i] is Domain.Entities.Boolean boolConst) RPNResult.Add(new ConstRPN(boolConst.Value.ToString(), ConstType.BOOLEAN, Tag.BOOLEAN_CONST));
                             else if (tokens[i] is Integer intConst) RPNResult.Add(new ConstRPN(intConst.Value.ToString(), ConstType.INTEGER, Tag.INTEGER_CONST));
                             else if (tokens[i] is Real realConst) RPNResult.Add(new ConstRPN(realConst.Value.ToString(), ConstType.REAL, Tag.REAL_CONST));
                             break;
