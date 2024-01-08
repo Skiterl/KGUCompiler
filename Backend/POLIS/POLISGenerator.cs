@@ -211,6 +211,7 @@ namespace Backend.POLIS
                             foreach (var id in IdsBuffer) SymbolTable.Put((DataType)tokens[i], id);
                             Stack.Pop();
                             i++;
+                            IdsBuffer.Clear();
                             break;
                         }
                     default:

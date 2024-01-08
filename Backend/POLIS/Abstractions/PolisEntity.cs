@@ -7,7 +7,7 @@ namespace Backend.POLIS.Abstractions
     {
         public Tag Tag { get; set; }
         public PolisEntityType Type { get; set; }
-        public string Value { get; set; }
+        public virtual string Value { get; set; }
         public PolisEntity(PolisEntityType type, string value, Tag tag)
         {
             Type = type;

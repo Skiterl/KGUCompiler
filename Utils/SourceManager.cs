@@ -76,8 +76,8 @@ namespace Utils
         {
             try
             {
-                var jsonText = JsonSerializer.Serialize(AssemblerGenerator.GenerateNASM());
-                File.WriteAllText("assembler.txt", jsonText);
+                AssemblerGenerator.GenerateNASM();
+                File.WriteAllLines("assembler.txt", AssemblerGenerator.asmCode);
             }
             catch (Exception e)
             {
