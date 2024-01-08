@@ -1,8 +1,8 @@
 ﻿using Domain.Abstractions;
 using Domain.Entities;
 using Domain.Enums;
+using Frontend.Exceptions;
 using Frontend.Symbols;
-using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -105,7 +105,8 @@ namespace Frontend.Lexical
                 LastToken = new Id(str);
                 return new Id(str);
             }
-            else throw new Exception($"Lexical Error in identification in {Line} line");
+            //else return new Word($"Lexical Error in identifier in {Line} line", Tag.ERROR, TokenType.ERROR);
+            else throw new LexerException($"Lexical error in identifier in {Line} line");
         }
 
         private Word HandleToken(string lexeme, Tag tag, TokenType tokenType)
@@ -149,7 +150,8 @@ namespace Frontend.Lexical
                                     Word Id = HandleWord(curChar);
                                     if (Id.Tag == Tag.ID) return Id;
                                 }
-                                else throw new Exception($"Expected Identifier in {Line} line");
+                                //else return new Word($"Expected Identifier in {Line} line", Tag.ERROR, TokenType.ERROR);
+                                else throw new LexerException($"Expected Identifier in {Line} line");
                             else if (LastToken.Tag == Tag.ID)
                             {
                                 if (curChar == ',') return HandleToken(",", Tag.COMMA, TokenType.SEPARATOR);
@@ -160,7 +162,8 @@ namespace Frontend.Lexical
                                     return Type;
                                 }
                             }
-                            throw new Exception($"Expected \",\" or Type in {Line} line");
+                            //return new Word($"Expected \",\" or Type in {Line} line", Tag.ERROR, TokenType.ERROR);
+                            throw new LexerException($"Expected \",\" or Type in {Line} line");
                         }
                     case LexerState.DEFAULT:
                         {
@@ -238,10 +241,11 @@ namespace Frontend.Lexical
                             if (char.IsDigit(curChar)) return HandleConst(curChar);
                             if (char.IsLetter(curChar)) return HandleWord(curChar);
 
-                            throw new Exception($"Unknown symbol {curChar} in {Line} line");
+                            //return new Word($"Unknown symbol {curChar} in {Line} line", Tag.ERROR, TokenType.ERROR);
+                            throw new LexerException($"Unknown symbol {curChar} in {Line} line");
                         }
                 }
-            Console.WriteLine("Lexical analys: OK");
+            //Console.WriteLine("Lexical analys: OK");
             return Word.EOF;
         }
 

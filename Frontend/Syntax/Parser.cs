@@ -1,11 +1,6 @@
-﻿using Frontend.Lexical;
+﻿using Frontend.Exceptions;
+using Frontend.Lexical;
 using Microsoft.VisualBasic.FileIO;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Frontend.Syntax
 {
@@ -107,12 +102,12 @@ namespace Frontend.Syntax
                             prod = prod.Trim();
 
                             if (RuleCheck(prod)) stack.Push(noterm);
-                            else throw new Exception("Syntax error: " + i + " Token: " + tokens[i]);
+                            else throw new ParserException("Syntax error: " + i + " Token: " + tokens[i]);
                             i--;
                             break;
                         }
                     default:
-                        throw new Exception("Syntax error: " + i + " Token: " + tokens[i]);
+                        throw new ParserException("Syntax error: " + i + " Token: " + tokens[i]);
                 }
             }
 
@@ -123,7 +118,8 @@ namespace Frontend.Syntax
 
             stack.Push("/e/");
 
-            if (stack.Count == 3) Console.WriteLine("Syntax analys: OK");
+            if (stack.Count != 3) throw new ParserException("Syntax error");
+            // Console.WriteLine("Syntax analys: OK");
         }
     }
 }

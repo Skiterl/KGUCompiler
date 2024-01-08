@@ -1,8 +1,7 @@
-﻿using Backend.Asm;
-using Frontend.Syntax;
+﻿using Utils;
 
-Parser parser = new Parser("ifcode.txt");
-parser.SyntaxCheck();
-
-AsmGenerator gen = new AsmGenerator("ifcode.txt");
-gen.GenerateNASM();
+SourceManager sm = new SourceManager("testnetcomp.txt");
+sm.LexerCompile();
+sm.ParserCompile();
+sm.PolisCompile();
+sm.AssemblerCompile();

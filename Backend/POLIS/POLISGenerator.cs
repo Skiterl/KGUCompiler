@@ -1,18 +1,11 @@
-﻿using Backend.POLIS.Abstractions;
+﻿using Backend.Exceptions;
+using Backend.POLIS.Abstractions;
 using Backend.POLIS.Entities;
 using Backend.POLIS.Enums;
-using Backend.RPN;
-using Domain.Abstractions;
 using Domain.Entities;
 using Domain.Enums;
 using Frontend.Lexical;
 using Frontend.Symbols;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.XPath;
 
 namespace Backend.POLIS
 {
@@ -58,12 +51,12 @@ namespace Backend.POLIS
             {Tag.GREATER_EQUAL, [10, 10] },
             {Tag.EQUAL,         [10, 10] },
             {Tag.NOT_EQUAL,     [10, 10] },
-            
+
             {Tag.NOT,           [11, 11] },
 
             {Tag.SUM,           [12, 12] },
             {Tag.SUB,           [12, 12] },
-            
+
             {Tag.MUL,           [13, 13] },
             {Tag.DIV,           [13, 13] },
 
@@ -157,7 +150,7 @@ namespace Backend.POLIS
             else return SymbolTable.GetType(el.Value);
         }
 
-        public List<PolisEntity> GenerateRPN()
+        public List<PolisEntity> GeneratePolis()
         {
             var tokens = Lexer.GetTokens().ToList();
 
@@ -170,7 +163,7 @@ namespace Backend.POLIS
 
             Stack.Push(new PolisSeparator("{", Tag.LBRA));
 
-            for(int i = 1; i < tokens.Count; i++)
+            for (int i = 1; i < tokens.Count; i++)
             {
                 switch (tokens[i].TokenType)
                 {
@@ -188,7 +181,7 @@ namespace Backend.POLIS
                             {
                                 Result.Add(new PolisConst<bool>(boolConst.Value, Tag.BOOLEAN_CONST));
                             }
-                            if(ExprStartIndex == -1) ExprStartIndex = Result.Count - 1;
+                            if (ExprStartIndex == -1) ExprStartIndex = Result.Count - 1;
                             break;
                         }
                     case TokenType.ID:
@@ -196,7 +189,7 @@ namespace Backend.POLIS
                             if (Stack.Peek().Tag == Tag.DIM)
                             {
                                 var haveId = SymbolTable.GetType((Id)tokens[i]);
-                                if (haveId is not null) throw new Exception("Переменная уже инициализирована.");
+                                if (haveId is not null) throw new PolisException("Переменная уже инициализирована.");
                                 IdsBuffer.Add((Id)tokens[i]);
                                 if (tokens[i + 1].Tag == Tag.COMMA) i++;
                             }
@@ -204,7 +197,7 @@ namespace Backend.POLIS
                             {
                                 var IdToken = (Id)tokens[i];
                                 var foundType = SymbolTable.GetType(IdToken);
-                                if (foundType is null) throw new Exception("Переменная не инициализирована.");
+                                if (foundType is null) throw new PolisException("Переменная не инициализирована.");
                                 var idkey = SymbolTable.Table.FirstOrDefault(x => x.Key.Value == IdToken.Value).Key;
 
                                 if (ExprStartIndex == -1) ExprStartIndex = Result.Count;
@@ -242,7 +235,7 @@ namespace Backend.POLIS
                                             {
                                                 Result.Add(Stack.Pop());
                                                 var type = ExpressionSemanticCheck(Result[ExprStartIndex..Result.Count]);
-                                                if (type is null) throw new Exception("Несовместимые типы");
+                                                if (type is null) throw new PolisException("Несовместимые типы");
                                                 i++;
                                                 ExprStartIndex = -1;
                                             }
@@ -262,11 +255,11 @@ namespace Backend.POLIS
                                                 if (Result.Last().Type == PolisEntityType.Operator)
                                                 {
                                                     if (!DataType.BooleanResultOperators.Contains(Result.Last().Tag))
-                                                        throw new Exception("if должен содержать boolean в условии");
+                                                        throw new PolisException("if должен содержать boolean в условии");
                                                 }
 
                                                 var type = ExpressionSemanticCheck(Result[ExprStartIndex..Result.Count]);
-                                                if (type.Tag != Tag.BOOLEAN_TYPE) throw new Exception("Ошибка в if");
+                                                if (type.Tag != Tag.BOOLEAN_TYPE) throw new PolisException("Ошибка в if");
                                                 ExprStartIndex = -1;
 
                                                 Stack.Pop();
@@ -294,10 +287,10 @@ namespace Backend.POLIS
                                             {
                                                 if (Result.Last().Type == PolisEntityType.Operator)
                                                     if (!DataType.BooleanResultOperators.Contains(Result.Last().Tag))
-                                                        throw new Exception("while должен содержать boolean в условии");
+                                                        throw new PolisException("while должен содержать boolean в условии");
 
                                                 var type = ExpressionSemanticCheck(Result[ExprStartIndex..Result.Count]);
-                                                if (type.Tag != Tag.BOOLEAN_TYPE) throw new Exception("Ошибка в while");
+                                                if (type.Tag != Tag.BOOLEAN_TYPE) throw new PolisException("Ошибка в while");
                                                 ExprStartIndex = -1;
 
                                                 var dotok = (PolisKeyword)Stack.Pop();
@@ -333,7 +326,7 @@ namespace Backend.POLIS
                                             {
                                                 Result.Add(Stack.Pop());
                                                 var type = ExpressionSemanticCheck(Result[ExprStartIndex..Result.Count]);
-                                                if (type is null) throw new Exception("Несовместимые типы");
+                                                if (type is null) throw new PolisException("Несовместимые типы");
                                                 ExprStartIndex = -1;
                                                 break;
                                             }
@@ -341,7 +334,7 @@ namespace Backend.POLIS
                                             i--;
                                             break;
                                         }
-                                    }
+                                }
                             }
                             break;
                         }
